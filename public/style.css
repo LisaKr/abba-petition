@@ -16,3 +16,7 @@ body {
     background-color: red;
     height: 100px;
 }
+
+audio {
+    display: none;
+}
