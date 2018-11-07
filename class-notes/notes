@@ -1,0 +1,66 @@
+//database stuff, needs to be segregated from everything else
+//just one place where I require spicedpg
+
+const spicedPg = require("spiced-pg");
+
+const db = spicedPg("postgres:postgres:postgres@localhost:5432/hello"); //the url to the database and the way to show postgres that we are some user
+//cities is just a databse we're using. collection of tables whic relate to each other
+//database I created yesterday
+
+exports.createCity = (city, country, population) => {
+    db.query(
+        `INSERT INTO cities (city,country,population)
+         VALUES ($1, $2, $3)
+         RETURNING *`,
+        [city, country, population] //treat it strictly as data
+    )
+        .then(function(results) {
+            console.log(results.rows); //its a JS object now so we can pass it to handlebars and loop through it
+        })
+        .catch(function(err) {
+            //this should be done at the server, latest possible moment
+            console.log(err);
+        });
+};
+
+//create all tables in separate sql files, not queries there
+//we read data from req.body, do a query to insert it into database
+//our queries are in the routes
+
+//three templates, no index.html, three routes. main page with forms and signature
+//if something goes wrong we render the same template but with an error message
+//a get route to render main page
+//a post route for the submit button
+//if error something like error=true and render the same get route
+
+// DROP TABLE IF EXISTS signatures;
+//
+// CREATE TABLE signatures(
+//     id SERIAL PRIMARY KEY,
+//     first VARCHAR(255) NOT NULL,
+//     last  VARCHAR(255) NOT NULL,
+//     sig TEXT NOT NULL
+// );
+
+//three forms, last one type="hidden" for the signature
+//when i mouse down im in drawing mode, combination of canvas and the exercise of thing following the mouse.
+//listen for mousemove. everytime mouse moves, lineto where x and y used to be and draw a line to where it now is
+//only client side js to complete the requirement
+//canvas.toDataURL() (a really big string), b64 encoded of all the image data --> browser knows how to deal with it
+//we need to take string of the canvas element and put it into the third hidden form input, dataurl into value of the hidden input field
+//time to set the value of the hidden field: when the mouse goes up and im done drawing, when click submit button or on submit event
+//david does on mouse up, every time mouse is up, the field is populated with what is in canvas
+//we are treating signatures as private information so we can only show them to people who signed it
+//after the user signs we set a cookie and dont let them sign again (last thing to do in part 1 bc it changes in part2
+//for the signers get route we need a function that does db query which gets first and last names (select first, last) and then passes that array to a template to loop
+//a file in which to do db queries, index.js for server setup, db.js function to insert and function for getting, three templates, one for main page, petition, thanks, signers
+// {{if}}
+// OOPS
+// {{/if}}
+//either only include canvas script on the page that needs it or write it in a way that only executes canvas code where there is canvas
+//if someone didnt sign the petition the only page they can see is main. the other two routes need to be directing back to main
+//once youve signed and you have the cookie, you cant get back to main and only redirected to thank you
+//1. create a sql signatures table and commit it also creating a new databse
+//2. get route for the petiotion and get something on the screen
+//3. get canvas working right
+//4. insert into database or other way round
