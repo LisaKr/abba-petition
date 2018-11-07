@@ -1,0 +1,22 @@
+<div class="container">
+    <h1>Welcome to my mysterious petition!</h1>
+
+    <form method="POST">
+        First name:<br>
+        <input type="text" name="first">
+        <br /><br />
+        Last name:<br>
+        <input type="text" name="last">
+        <br /><br />
+        Signature: <br/>
+        <input type="hidden" name="sig">
+        <canvas id="signature" width="300" height="50"></canvas><br/>
+        <button type="submit">Submit</button>
+    </form>
+
+    <br />
+
+    {{#if error}}
+        <div class="error">Oh no! Something went wrong! Try again! </div>
+    {{/if}}
+</div>

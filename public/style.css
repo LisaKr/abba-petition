@@ -1,0 +1,18 @@
+#signature {
+    border: 1px solid #000000;
+}
+
+body {
+    background: pink;
+}
+
+.container {
+    width: 70%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error {
+    background-color: red;
+    height: 100px;
+}
