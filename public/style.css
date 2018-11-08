@@ -1,22 +1,86 @@
+body,
+html,
+.container {
+    height: 100%;
+}
+
 #signature {
     border: 1px solid #000000;
 }
 
 body {
-    background: pink;
+    background: linear-gradient(90deg, #6dc9c8, #c38d9e);
+    font-family: "Julius Sans One";
+    color: white;
 }
 
 .container {
-    width: 70%;
+    width: 60%;
     margin: 0 auto;
     text-align: center;
 }
 
 .error {
-    background-color: red;
-    height: 100px;
+    color: red;
+    font-weight: bold;
 }
 
 audio {
     display: none;
+}
+
+img {
+    width: 450px;
+}
+
+.button {
+    font-size: 1.4em;
+    display: block;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+    border: 1px solid black;
+    width: 35%;
+    margin: 0 auto;
+    background: #0e3150;
+    padding: 10px;
+    /* transition-property: width, height, transform, background, font-size,
+        opacity;
+    transition-duration: 1s, 1s, 1s, 1s, 1s, 1s; */
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); */
+    display: inline-block;
+}
+
+/* .button:hover {
+    transform: rotateX(-90deg);
+} */
+
+a {
+    text-decoration: none;
+    font-size: 0.95em;
+    color: white;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.slider {
+    animation: 1s slide;
+    display: inline-block;
+    width: 30%;
+    position: absolute;
+    left: 60%;
+}
+
+@keyframes slide {
+    from {
+        left: -100%;
+    }
+    to {
+        left: 60%;
+    }
+}
+
+h1,
+h2 {
+    line-height: 1.5;
 }

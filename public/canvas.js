@@ -10,22 +10,18 @@ $(document).ready(function() {
         var y = e.offsetY;
         context.strokeStyle = "black";
         context.lineWidth = 2;
-        context.beginPath();
         context.moveTo(y, x);
+        context.beginPath();
         $(this).mousemove(function(e) {
             x = e.offsetX;
             y = e.offsetY;
             context.lineTo(x, y);
             context.stroke();
         });
-    })
-        .mouseup(function() {
-            $(this).unbind("mousemove");
-            var secret = c[0].toDataURL();
-            hidden.val(secret);
-            console.log(secret);
-        })
-        .mouseout(function() {
-            $(this).unbind("mousemove");
-        });
+    }).mouseup(function() {
+        $(this).unbind("mousemove");
+        var secret = c[0].toDataURL();
+        hidden.val(secret);
+        console.log(secret);
+    });
 });

@@ -1,21 +1,19 @@
-//we read data from req.body, do a query to insert it into database
-//our queries are in the routes
+<form method="POST">
+<input name="firstname" type="text" placeholder="first name">
+<button>submit</button>
+</form>
 
-//three templates, no index.html, three routes. main page with forms and signature
-//if something goes wrong we render the same template but with an error message
-//a get route to render main page
-//a post route for the submit button
-//if error something like error=true and render the same get route
+app.post("/about", (req,res)=>{
+    req.session.id = req.body.sig;
+});
+
+//we need to get the id out of database and into the cookie every time we successfully submit
+//do it with returning
 
 
+add middleware to prevent clickjacking
 
-//we are treating signatures as private information so we can only show them to people who signed it
-//after the user signs we set a cookie and dont let them sign again (last thing to do in part 1 bc it changes in part2
-//for the signers get route we need a function that does db query which gets first and last names (select first, last) and then passes that array to a template to loop
-//a file in which to do db queries, index.js for server setup, db.js function to insert and function for getting, three templates, one for main page, petition, thanks, signers
-// {{if}}
-// OOPS
-// {{/if}}
-//either only include canvas script on the page that needs it or write it in a way that only executes canvas code where there is canvas
-//if someone didnt sign the petition the only page they can see is main. the other two routes need to be directing back to main
-//once youve signed and you have the cookie, you cant get back to main and only redirected to thank you
+app.use(function(req,res,next){
+    res.setHeader("X-Frame-Options", "DENY");
+    next();
+});
