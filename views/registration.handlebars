@@ -1,0 +1,36 @@
+<div class="container">
+    <br /><br />
+    <br /><br />
+    <br /><br />
+
+    Hello please register to sign my petition!
+    <br /><br />
+    <br /><br />
+    <br /><br />
+    {{#if error}}
+        <div class="error">Oops! Something went wrong! Please try again. <br />Note that all fields must be filled out.</div>
+        <audio autoplay>
+            <source src="womp-womp.mp3" type="audio/mpeg">
+        </audio>
+        <br />
+    {{/if}}
+
+    <form method="POST">
+        First name:<br>
+        <input type="text" name="first" autocomplete="off">
+        <br /><br />
+        Last name:<br>
+        <input type="text" name="last" autocomplete="off">
+        <br /><br />
+        E-Mail:<br>
+        <input type="text" name="email" autocomplete="off">
+        <br /><br />
+        Password:<br>
+        <input type="text" name="pass" autocomplete="off">
+        <br /><br /><br>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button type="submit">Register</button>
+    </form>
+<br /><br />
+    Already registered? Please <a href="/login"> log in </a> here.
+</div>

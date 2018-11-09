@@ -9,7 +9,7 @@ html,
 }
 
 body {
-    background: linear-gradient(90deg, #6dc9c8, #c38d9e);
+    background: linear-gradient(10deg, #ffc8c8 45%, #71c9ce 45%);
     font-family: "Julius Sans One";
     color: white;
 }
@@ -21,7 +21,7 @@ body {
 }
 
 .error {
-    color: red;
+    color: #88304e;
     font-weight: bold;
 }
 

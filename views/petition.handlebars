@@ -12,12 +12,6 @@
     {{/if}}
 
     <form method="POST">
-        First name:<br>
-        <input type="text" name="first" autocomplete="off">
-        <br /><br />
-        Last name:<br>
-        <input type="text" name="last" autocomplete="off">
-        <br /><br />
         Signature: <br/>
         <input type="hidden" name="sig">
         <canvas id="signature" width="300" height="50"></canvas><br/>
@@ -26,4 +20,6 @@
     </form>
 
     <br />
+    {{>logOut}}
+
 </div>

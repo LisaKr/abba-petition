@@ -1,0 +1,29 @@
+<div class="container">
+    <br /><br />
+    <br /><br />
+    <br /><br />
+
+    Hello please LOG IN to proceed!
+    <br /><br />
+    <br /><br />
+    <br /><br />
+    {{#if error}}
+        <div class="error">Oops! Something went wrong! Please try again. <br />Note that all fields must be filled out.</div>
+        <audio autoplay>
+            <source src="womp-womp.mp3" type="audio/mpeg">
+        </audio>
+        <br />
+    {{/if}}
+
+    <form method="POST">
+        E-Mail:<br>
+        <input type="text" name="email" autocomplete="off">
+        <br /><br />
+        Password:<br>
+        <input type="text" name="pass" autocomplete="off">
+        <br /><br />
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button type="submit">Log In</button>
+    </form>
+<br /><br />
+    Not registered yet? Please <a href="/registration"> sign up </a> here.
