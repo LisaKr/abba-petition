@@ -1,10 +1,11 @@
 <div class="container">
-    <img src="/abba.png" />
+    <br />
+    <img src="/abba.png" /><br />
 
-    <h1>Sign my petition to make ABBA perform at every Eurovision until the end of time!</h1>
+    <h3>Sign my petition to make ABBA perform at every Eurovision until the <span>end of time!<div class="fadingEffect"></div></span></h3><br />
 
     {{#if error}}
-        <div class="error">Oops! Something went wrong! Please try again. <br />Note that all fields must be filled out.</div>
+        <div class="error">Oops! Something went wrong! Please try again later.</div>
         <audio autoplay>
             <source src="womp-womp.mp3" type="audio/mpeg">
         </audio>
@@ -16,10 +17,10 @@
         <input type="hidden" name="sig">
         <canvas id="signature" width="300" height="50"></canvas><br/>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <button type="submit">Submit</button>
+        <button type="submit" class="button">I'm in!</button>
     </form>
 
-    <br />
+    <br /><br />
     {{>logOut}}
 
 </div>

@@ -1,12 +1,13 @@
 <div class="container">
-    <h2>Mamma mia! Thank you for your signature! You're a real dancing queen!</h2>
+    <h3>Thank you for your signature, {{name}}! You're a real dancing queen!</h3>
     <img src={{url}} />
-    <iframe src="/abba2.gif" width="480" height="360" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
+    <img src="/abba2.gif" />
 
-<br /><br />
-    <div class="button">
+<br />
+    <div class="button big">
         <a href="/signers">See all {{length}} signers for this noble cause!</a>
     </div>
-</div>
+    <br /><br />
+    {{>logOut}}
 
-{{>logOut}}
+</div>

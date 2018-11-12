@@ -1,11 +1,10 @@
 <div class="container">
     <h2>Those are the people passionate about the greatest pop band of all times</h2> <br />
 
-    <img class="slider" src="/thumbs.png"
 
     {{#each results}}
     <p>
-        {{first}} {{last}}
+        <a href={{url}}>{{first}} {{last}}</a>  <a href="signers/{{city}}">{{city}}</a> {{age}}
     </p>
     {{/each}}
     <br />

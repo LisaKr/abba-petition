@@ -1,23 +1,36 @@
-body,
-html,
-.container {
-    height: 100%;
-}
-
 #signature {
-    border: 1px solid #000000;
+    border-bottom: 1px solid #000000;
 }
 
 body {
-    background: linear-gradient(10deg, #ffc8c8 45%, #71c9ce 45%);
+    margin: 0;
+    background: linear-gradient(10deg, #ffcef3 50%, #a1eafb 50%);
     font-family: "Julius Sans One";
-    color: white;
+    color: #0c056d;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+input {
+    border: 0;
+    outline: 0;
+    border-bottom: 1px solid black;
+    background: inherit;
+    cursor: text;
+}
+
+p a {
+    color: #0c056d;
 }
 
 .container {
-    width: 60%;
+    width: 50%;
     margin: 0 auto;
     text-align: center;
+    font-size: 1.2em;
+    line-height: 1.2;
+    /* height: 100%; */
 }
 
 .error {
@@ -30,23 +43,28 @@ audio {
 }
 
 img {
-    width: 450px;
+    width: 400px;
+    display: block;
+    margin: 0 auto;
 }
 
 .button {
-    font-size: 1.4em;
+    font-size: 1.1em;
     display: block;
     text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
     border: 1px solid black;
-    width: 35%;
-    margin: 0 auto;
-    background: #0e3150;
+    width: 20%;
+    /* margin: 0 auto; */
+    margin: 20px;
+    background: #574b90;
     padding: 10px;
     /* transition-property: width, height, transform, background, font-size,
         opacity;
     transition-duration: 1s, 1s, 1s, 1s, 1s, 1s; */
     /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); */
     display: inline-block;
+    font-family: "Julius Sans One";
+    color: white;
 }
 
 /* .button:hover {
@@ -81,6 +99,42 @@ a:hover {
 }
 
 h1,
-h2 {
+h2,
+.text {
     line-height: 1.5;
+}
+
+h2 {
+    margin-bottom: 0;
+}
+/* p {
+    font-size: 52px;
+} */
+
+.big {
+    width: 40%;
+}
+
+.logout {
+    background: #8c82fc;
+}
+
+span {
+    opacity: 1;
+    animation: flickerAnimation 2s infinite;
+}
+
+@keyframes flickerAnimation {
+    /* flame pulses */
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

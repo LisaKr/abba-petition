@@ -1,12 +1,14 @@
 <div class="container">
-    <br /><br />
-    <br /><br />
-    <br /><br />
 
-    Hello please register to sign my petition!
-    <br /><br />
-    <br /><br />
-    <br /><br />
+<br />
+    <img src="/abba.png" />
+    <br />
+
+    <!-- <div class="text">
+        Reuniting ABBA is within our reach — but we can't do it alone.<br />
+        Please sign up to support our cause!
+    </div> -->
+    <br />
     {{#if error}}
         <div class="error">Oops! Something went wrong! Please try again. <br />Note that all fields must be filled out.</div>
         <audio autoplay>
@@ -23,14 +25,14 @@
         <input type="text" name="last" autocomplete="off">
         <br /><br />
         E-Mail:<br>
-        <input type="text" name="email" autocomplete="off">
+        <input type="email" name="email" autocomplete="off">
         <br /><br />
         Password:<br>
-        <input type="text" name="pass" autocomplete="off">
-        <br /><br /><br>
+        <input type="password" name="pass" autocomplete="off">
+        <br /><br />
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <button type="submit">Register</button>
+        <button type="submit" class="button" >Register</button>
     </form>
-<br /><br />
+<br />
     Already registered? Please <a href="/login"> log in </a> here.
 </div>
