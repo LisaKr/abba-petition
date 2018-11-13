@@ -1,0 +1,29 @@
+<div class="container">
+    <p>Update your information</p>
+    <br /><br><br>
+    <form method="POST">
+        First name:<br>
+        <input type="text" name="first" autocomplete="off" value="{{results.first}}">
+        <br /><br />
+        Last name:<br>
+        <input type="text" name="last" autocomplete="off" value="{{results.last}}">
+        <br /><br />
+        E-Mail:<br>
+        <input type="email" name="email" autocomplete="off" value="{{results.email}}">
+        <br /><br />
+        Password:<br>
+        <input type="password" name="pass" autocomplete="off">
+        <br /><br />
+        Age:<br>
+        <input type="text" name="age" autocomplete="off" value="{{results.age}}">
+        <br /><br />
+        City:<br>
+        <input type="text" name="city" autocomplete="off" value="{{results.city}}">
+        <br /><br />
+        URL:<br>
+        <input type="text" name="url" autocomplete="off" value="{{results.url}}">
+        <br /><br />
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button type="submit" class="button">Update</button>
+    </form>
+</div>

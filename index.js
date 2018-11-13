@@ -32,15 +32,17 @@ app.use(function(req, res, next) {
 
 app.use(express.static("./public"));
 
+//////RENDERS MAIN PAGE IF YOU'RE NOT LOGGED IN, RENDERS ADDITIONAL INFO IF YOU DELETED YOUR PROFILE//////
 app.get("/", (req, res) => {
     if (!req.session.userID) {
-        res.render("main");
+        res.render("home", {
+            deleted: req.query.deleted_all
+        });
     } else {
         res.redirect("/petition");
     }
 });
 
-///registration
 app.get("/registration", function(req, res) {
     //if the user is not already registered/logged in, this unique cookie is set at the moment of log in/registration
     //if the cookie is not set you have access to the login and registration page
@@ -197,7 +199,9 @@ app.post("/login", function(req, res) {
 ////////////showing the petition page with the signature///////////
 app.get("/petition", function(req, res) {
     if (!req.session.signed) {
-        res.render("petition");
+        res.render("petition", {
+            deleted: req.query.deleted
+        });
     } else {
         res.redirect("/thanks");
     }
@@ -227,19 +231,32 @@ app.post("/petition", function(req, res) {
 //we need get signers to get the lebgth of the array and get signature to present it
 app.get("/thanks", function(req, res) {
     if (req.session.signed && req.session.userID) {
-        Promise.all([
-            db.showSigners(),
-            db.getSignature(req.session.userID)
-        ]).then(function([resultSigners, resultSig]) {
-            res.render("thanks", {
-                length: resultSigners.rows.length,
-                url: resultSig.rows[0].sig,
-                name: resultSigners.rows[0].first
+        Promise.all([db.showSigners(), db.getSignature(req.session.userID)])
+            .then(function([resultSigners, resultSig]) {
+                res.render("thanks", {
+                    length: resultSigners.rows.length,
+                    url: resultSig.rows[0].sig,
+                    name: resultSig.rows[0].first
+                });
+            })
+            .catch(function(err) {
+                console.log("ERROR IN THANKs", err);
             });
-        });
     } else {
         res.redirect("/");
     }
+});
+
+//deleting signatures
+app.post("/thanks", (req, res) => {
+    db.deleteSig(req.session.userID)
+        .then(function() {
+            req.session.signed = null;
+            res.redirect("/petition?deleted=true");
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
 });
 
 app.get("/signers", function(req, res) {
@@ -292,6 +309,93 @@ app.get("/signers/:city", function(req, res) {
         });
 });
 
+////edit profile
+app.get("/edit", (req, res) => {
+    if (req.session.userID) {
+        db.fillTheForm(req.session.userID)
+            .then(function(result) {
+                res.render("editprofile", {
+                    results: result.rows[0]
+                });
+            })
+            .catch(function(err) {
+                console.log("ERROR IN EDIT ", err);
+            });
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.post("/edit", (req, res) => {
+    //if the user typed anything in the password field we need to hash it and update 4 fields
+    if (req.body.pass) {
+        db.hashPassword(req.body.pass).then(function(hash) {
+            Promise.all([
+                db.updateUserTableWithPassword(
+                    req.body.first,
+                    req.body.last,
+                    req.body.email,
+                    hash,
+                    req.session.userID
+                ),
+                db.updateUserProfileTable(
+                    req.body.age,
+                    req.body.city,
+                    req.body.url,
+                    req.session.userID
+                )
+            ])
+                .then(function() {
+                    //after both tables were updated
+                    res.redirect("/petition");
+                })
+                .catch(function(err) {
+                    console.log("ERROR IN UPDATING", err);
+                });
+        });
+    } else {
+        //update the thing without the password
+        Promise.all([
+            db.updateUserTableNoPassword(
+                req.body.first,
+                req.body.last,
+                req.body.email,
+                req.session.userID
+            ),
+            db.updateUserProfileTable(
+                req.body.age,
+                req.body.city,
+                req.body.url,
+                req.session.userID
+            )
+        ])
+            .then(function() {
+                res.redirect("/petition");
+            })
+            .catch(function(err) {
+                console.log("ERROR IN UPDATING", err);
+            });
+    }
+});
+
+//deleting profile
+app.post("/delete", (req, res) => {
+    db.deleteInfoFromSignatureTable(req.session.userID)
+        .then(function() {
+            db.deleteInfoFromUserProfileTable(req.session.userID);
+        })
+        .then(function() {
+            db.deleteInfoFromUserTable(req.session.userID);
+        })
+        .then(function() {
+            req.session = null;
+            res.redirect("/?deleted_all=true");
+        })
+        .catch(function(err) {
+            console.log("ERROR IN DELETING", err);
+        });
+});
+
 //logout
 
 app.get("/logout", function(req, res) {
@@ -301,16 +405,24 @@ app.get("/logout", function(req, res) {
 
 app.listen(8080, () => ca.rainbow("Big Brother is listening!"));
 
-//new route for onboarding
-//get: just shows the form
-//post: only add if its filled out, redirect to petition
-//showing signers: show data from both tables if applicable
-//urls: needs to be https or https in the beginning. if it doesnt, adding http
-//city should be a link too --> if you click on it, you go to page which only shows signers from this city /signers/:city
-//quera where city == $1 and $1 as the city
-//two new pages: profile form and signers by city, we can use the exact same template
-//where lower(city) = lower($1)
-//one fucntion, if it geta oseed the icty it gets a where and if ti doesnt it gets a where
-//signature id is null then they didnt sign
-//when they login a query by email data from users and signatures, if no data in signatures, they didnt sign, if there is
-//then add a cookie to the session indicating the signature
+//where the form is is up to us, where to redirect also
+//when the user submits the form update the users table
+//get route: joined query (u and up), prepopulate the form with the information
+//first, last, pass, email --> UPDATE because they already have some stuff --> how many do we update? password field
+//will be blank and we need to manually see whether they typed something or not and then either hash or update three fields
+//if req.body.pass is not an empty string we need to hash it again and update 4 instead of 3
+//INSERT OR UPDATE for the user profile, conflict will be on user_id (foreign key)
+//after deleting signature forward to petition, not thank you
+// <form method="POST">
+//cref
+//<button>Delete your sig</button> --> must be a submit button in a form but we can style it however
+//app.get(sig/delete) db.deleteSig(req.session.userID).then.catch
+//you can delete your entire account as a bonus. three quieries
+//DELETE FROM table WHERE name = something;
+//UPDATE singers
+//SET name = "sometheing", age=100
+//WHERE something
+
+//we can also replace the onboarding with upsert to avoid double key violations
+//we have to do two queries on the same route. we can do them subseqentially, but really we want them at the same time
+//promise.all

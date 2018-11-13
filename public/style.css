@@ -1,27 +1,90 @@
-#signature {
-    border-bottom: 1px solid #000000;
-}
-
+/*GENERAL LOOK*/
 body {
     margin: 0;
-    background: linear-gradient(10deg, #ffcef3 50%, #a1eafb 50%);
+    background: linear-gradient(10deg, #d0e9c9 50%, #cfdced 50%);
     font-family: "Julius Sans One";
     color: #0c056d;
     height: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    box-sizing: border-box;
+    cursor: auto;
 }
 
-input {
+/*NOTIFICATION AT THE MAIN PAGE AFTER DELETING YOUR ACCOUNT*/
+.notification {
+    color: #00ac00;
+    font-family: "Archivo Narrow";
+}
+
+h1,
+h2,
+h3 {
+    line-height: 1.5;
+    /* color: white;
+    text-shadow: #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
+        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
+        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
+        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
+        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px; */
+}
+
+/*BUTTONS*/
+
+.button {
+    font-size: 1em;
+    /* width: 25%; */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    background: #f0af5f;
+    padding: 10px;
+    display: inline-block;
+    font-family: "Julius Sans One";
+    color: white;
+    /* text-shadow: 0 0 1px rgba(255, 255, 255, 0.3); */
+    /* border: 1px solid black; */
+    /* transition-property: width, height, transform, background, font-size,
+        opacity;
+    transition-duration: 1s, 1s, 1s, 1s, 1s, 1s; */
+    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); */
+}
+
+.big {
+    width: 300px;
+}
+
+/*Links inside buttons should we white*/
+.button a {
+    color: white;
+}
+
+/* Normal links should be green*/
+a {
+    text-decoration: none;
+    color: #00ac00;
+}
+
+a:hover,
+.button:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/*Fields to put stuff in*/
+
+input,
+#signature,
+.underline {
     border: 0;
     outline: 0;
     border-bottom: 1px solid black;
     background: inherit;
-    cursor: text;
 }
 
-p a {
-    color: #0c056d;
+input {
+    cursor: text;
 }
 
 .container {
@@ -30,7 +93,6 @@ p a {
     text-align: center;
     font-size: 1.2em;
     line-height: 1.2;
-    /* height: 100%; */
 }
 
 .error {
@@ -44,88 +106,29 @@ audio {
 
 img {
     width: 400px;
-    display: block;
+    display: inline-block;
     margin: 0 auto;
 }
 
-.button {
-    font-size: 1.1em;
-    display: block;
-    text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
-    border: 1px solid black;
-    width: 20%;
-    /* margin: 0 auto; */
-    margin: 20px;
-    background: #574b90;
-    padding: 10px;
-    /* transition-property: width, height, transform, background, font-size,
-        opacity;
-    transition-duration: 1s, 1s, 1s, 1s, 1s, 1s; */
-    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); */
-    display: inline-block;
-    font-family: "Julius Sans One";
-    color: white;
-}
-
-/* .button:hover {
-    transform: rotateX(-90deg);
-} */
-
-a {
-    text-decoration: none;
-    font-size: 0.95em;
-    color: white;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.slider {
-    animation: 1s slide;
-    display: inline-block;
-    width: 30%;
-    position: absolute;
-    left: 60%;
-}
-
-@keyframes slide {
-    from {
-        left: -100%;
-    }
-    to {
-        left: 60%;
-    }
-}
-
-h1,
-h2,
-.text {
-    line-height: 1.5;
-}
-
-h2 {
-    margin-bottom: 0;
-}
-/* p {
-    font-size: 52px;
-} */
-
-.big {
-    width: 40%;
-}
-
 .logout {
-    background: #8c82fc;
+    background: #3eac51;
 }
 
-span {
+.wrapper {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+/* .menu {
+    float: right;
+} */
+
+/* span {
     opacity: 1;
     animation: flickerAnimation 2s infinite;
 }
 
 @keyframes flickerAnimation {
-    /* flame pulses */
     0% {
         opacity: 1;
     }
@@ -137,4 +140,4 @@ span {
     100% {
         opacity: 1;
     }
-}
+} */

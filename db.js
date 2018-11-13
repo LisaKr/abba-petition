@@ -36,16 +36,6 @@ module.exports.getUser = function getUser(email) {
     );
 };
 
-//adding additional info
-// exports.addInfo
-
-/////checking if there is a row in the signatures table with the id of the user who is being logged in (user who just registered
-//cannot possibly have a signature yet)
-
-// exports.checkForSig = function checkForSig(id) {
-//     return db.query(`SELECT * FROM signatures WHERE user_id = $1`, [id]);
-// };
-
 ///adding a signature string after the user signs/////////
 //right now we are adding first and last even tho its redundant with the users table. we'll fix it on monday.
 exports.addSig = function(sig, user_id) {
@@ -57,9 +47,28 @@ exports.addSig = function(sig, user_id) {
     );
 };
 
-///showing you your own signature after signing///
+//delete Sig
+exports.deleteSig = function(id) {
+    return db.query(
+        `
+        DELETE
+        FROM signatures
+        WHERE user_id = $1`,
+        [id]
+    );
+};
+
+///showing you your own signature after signing/// //JOIN USER TABLE HERE TO GET A NAME FOR THE THANKS TEMPLATE
 exports.getSignature = function getSignature(id) {
-    return db.query(`SELECT sig FROM signatures WHERE user_id = $1`, [id]);
+    return db.query(
+        `
+        SELECT sig, users.first
+        FROM signatures
+        LEFT JOIN users
+        ON signatures.user_id = users.id
+        WHERE user_id = $1`,
+        [id]
+    );
 };
 
 ///showing all users from the signatures table/////
@@ -77,7 +86,7 @@ exports.showSigners = function() {
 
 ///get signers by city
 
-module.exports.signersByCity = function signersByCity(city) {
+exports.signersByCity = function signersByCity(city) {
     return db.query(
         //we only show the ones who signed at all and get the corresponding information from user_profiles
         `SELECT users.first, users.last, up.age, up.city, up.url
@@ -89,6 +98,101 @@ module.exports.signersByCity = function signersByCity(city) {
         WHERE LOWER(city) = LOWER($1)
         `,
         [city]
+    );
+};
+
+/////populate the edit form with the existing data from the db////
+exports.fillTheForm = function fillTheForm(id) {
+    return db.query(
+        `SELECT users.first, users.last, users.email, users.pass, up.age, up.city, up.url
+        FROM users
+        LEFT JOIN user_profiles AS up
+        ON users.id = up.user_id
+        WHERE users.id = $1`,
+        [id]
+    );
+};
+
+// prettier-ignore
+///update the data, this one is 100% update  because this data already exists /////
+exports.updateUserTableWithPassword = function updateUserTableWithPassword(
+    first,
+    last,
+    email,
+    pass,
+    id
+) {
+    return db.query(
+        `UPDATE users
+        SET first=$1, last=$2, email=$3, pass=$4
+        WHERE id = $5
+        RETURNING id`, [first, last, email, pass, id]
+    );
+};
+
+//now without password
+exports.updateUserTableNoPassword = function updateUserTableNoPassword(
+    first,
+    last,
+    email,
+    id
+) {
+    return db.query(
+        `UPDATE users
+        SET first=$1, last=$2, email=$3
+        WHERE id = $4
+        RETURNING id`,
+        [first, last, email, id]
+    );
+};
+
+//insert/update the user_profile table////
+exports.updateUserProfileTable = function updateUserProfileTable(
+    age,
+    city,
+    url,
+    user_id
+) {
+    return db.query(
+        `
+        INSERT into user_profiles (age, city, url, user_id)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (user_id)
+        DO UPDATE SET age = $1, city = $2, url = $3
+        RETURNING id`,
+        [age, city, url, user_id]
+    );
+};
+
+//queries to delete whole profile
+exports.deleteInfoFromUserTable = function deleteInfoFromUserTable(id) {
+    return db.query(
+        `
+        DELETE FROM users
+        WHERE id = $1`,
+        [id]
+    );
+};
+
+exports.deleteInfoFromUserProfileTable = function deleteInfoFromUserProfileTable(
+    id
+) {
+    return db.query(
+        `
+        DELETE FROM user_profiles
+        WHERE user_id = $1`,
+        [id]
+    );
+};
+
+exports.deleteInfoFromSignatureTable = function deleteInfoFromSignatureTable(
+    id
+) {
+    return db.query(
+        `
+        DELETE FROM signatures
+        WHERE user_id = $1`,
+        [id]
     );
 };
 

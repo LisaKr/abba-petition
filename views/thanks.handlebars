@@ -1,13 +1,19 @@
 <div class="container">
-    <h3>Thank you for your signature, {{name}}! You're a real dancing queen!</h3>
-    <img src={{url}} />
+    <h3>Thank you for your signature, {{name}}! <br />You're a real dancing queen!</h3>
+    <img src={{url}} class="underline" />
+    <br />
     <img src="/abba2.gif" />
+    <br />
 
-<br />
-    <div class="button big">
-        <a href="/signers">See all {{length}} signers for this noble cause!</a>
+    <div class="wrapper">
+        <a href="/signers"><button class="button big">See all {{length}} signers</button></a>
+        <form method="POST">
+            <button type="submit" class="button big">Delete your signature</button>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </form>
+
+        {{>menu}}
     </div>
-    <br /><br />
-    {{>logOut}}
+
 
 </div>

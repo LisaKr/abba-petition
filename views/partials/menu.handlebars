@@ -1,0 +1,12 @@
+<!-- the three buttons that are visible in every logged-in menu (petition, thanks, signers) -->
+
+    <a href="/edit"><button class="button big">Edit your profile</button></a>
+
+    <form method="POST" action="/delete">
+        <button type="submit" class="button big">Delete your profile</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </form>
+
+    <div class="button logout">
+        <a href="/logout"> Log Out </a>
+    </div>
