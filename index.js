@@ -248,7 +248,7 @@ app.get("/thanks", function(req, res) {
 });
 
 //deleting signatures
-app.post("/thanks", (req, res) => {
+app.post("/signature/delete", (req, res) => {
     db.deleteSig(req.session.userID)
         .then(function() {
             req.session.signed = null;

@@ -1,6 +1,13 @@
+<div class="header">
+    <img class="nav" src="/hamburger.png" />
+    <div class="dropdown invisible">
+        <div class="closing">X</div>
+        {{>menu}}
+    </div>
+</div>
+
 <div class="container">
-    <br />
-        {{#if deleted}}
+            {{#if deleted}}
             <div class="notification">We're sorry to see you go! If you change your mind you can always sign the petition here.</div>
         {{/if}}
         <br />
@@ -23,7 +30,5 @@
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
             <button type="submit" class="button">I'm in!</button>
         </form>
-
-        {{>menu}}
 
 </div>

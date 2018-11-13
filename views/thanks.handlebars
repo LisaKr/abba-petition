@@ -1,19 +1,21 @@
+<div class="header">
+    <img class="nav" src="/hamburger.png" />
+    <div class="dropdown invisible">
+        <div class="closing">X</div>
+        <a href="/signers"><button class="button big">See all {{length}} signers</button></a>
+        <form method="POST" action="/signature/delete">
+            <button type="submit" class="button big">Delete your signature</button>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </form>
+        {{>menu}}
+    </div>
+</div>
+
 <div class="container">
     <h3>Thank you for your signature, {{name}}! <br />You're a real dancing queen!</h3>
     <img src={{url}} class="underline" />
     <br />
     <img src="/abba2.gif" />
     <br />
-
-    <div class="wrapper">
-        <a href="/signers"><button class="button big">See all {{length}} signers</button></a>
-        <form method="POST">
-            <button type="submit" class="button big">Delete your signature</button>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        </form>
-
-        {{>menu}}
-    </div>
-
 
 </div>

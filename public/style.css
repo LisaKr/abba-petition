@@ -1,4 +1,8 @@
 /*GENERAL LOOK*/
+
+html {
+    height: 100%;
+}
 body {
     margin: 0;
     background: linear-gradient(10deg, #d0e9c9 50%, #cfdced 50%);
@@ -7,7 +11,6 @@ body {
     height: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    box-sizing: border-box;
     cursor: auto;
 }
 
@@ -36,8 +39,8 @@ h3 {
     /* width: 25%; */
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 5px;
-    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-top: 10px;
     background: #f0af5f;
     padding: 10px;
     display: inline-block;
@@ -52,7 +55,7 @@ h3 {
 }
 
 .big {
-    width: 300px;
+    width: 200px;
 }
 
 /*Links inside buttons should we white*/
@@ -85,6 +88,9 @@ input,
 
 input {
     cursor: text;
+    font-size: 16px;
+    font-family: "Archivo Narrow";
+    letter-spacing: 1px;
 }
 
 .container {
@@ -104,6 +110,55 @@ audio {
     display: none;
 }
 
+/*hamburger menu*/
+.header {
+    height: 5em;
+    margin-bottom: -1.5em;
+    margin-top: -1.5em;
+    position: relative;
+}
+
+.nav {
+    height: 3em;
+    width: 3em;
+    margin-top: 2em;
+    margin-right: 2em;
+    float: right;
+}
+
+.invisible {
+    left: 100%;
+}
+
+.visible {
+    left: 75%;
+    transition: left 0.5s linear;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+    background-color: #928a97;
+    position: fixed;
+    right: 0;
+    z-index: 99999;
+    height: 110%;
+}
+
+.closing {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-family: Arial;
+    font-size: 20px;
+    align-self: flex-end;
+    padding-right: 15px;
+    color: #0c056d;
+}
+
+/*////////////*/
+
 img {
     width: 400px;
     display: inline-block;
@@ -113,31 +168,3 @@ img {
 .logout {
     background: #3eac51;
 }
-
-.wrapper {
-    display: inline-flex;
-    flex-direction: column;
-}
-
-/* .menu {
-    float: right;
-} */
-
-/* span {
-    opacity: 1;
-    animation: flickerAnimation 2s infinite;
-}
-
-@keyframes flickerAnimation {
-    0% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-} */

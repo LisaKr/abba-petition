@@ -1,3 +1,15 @@
+<div class="header">
+    <img class="nav" src="/hamburger.png" />
+    <div class="dropdown invisible">
+        <div class="closing">X</div>
+        <form method="POST" action="/signature/delete">
+            <button type="submit" class="button big">Delete your signature</button>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </form>
+        {{>menu}}
+    </div>
+</div>
+
 <div class="container">
     <h2>Those are the people of {{city}} passionate about the greatest pop band of all times</h2> <br />
 
@@ -11,5 +23,4 @@
     <br />
     <br />
 
-{{>menu}}
 </div>
