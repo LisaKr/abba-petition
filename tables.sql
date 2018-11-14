@@ -4,7 +4,6 @@ DROP TABLE IF EXISTS users;
 
 
 
---after registration
  CREATE TABLE users(
      id SERIAL PRIMARY KEY,
      first VARCHAR(255) NOT NULL,
@@ -13,14 +12,12 @@ DROP TABLE IF EXISTS users;
      pass  VARCHAR(255) NOT NULL
 );
 
---after signature
 CREATE TABLE signatures(
      id SERIAL PRIMARY KEY,
      sig TEXT NOT NULL,
      user_id INTEGER NOT NULL REFERENCES users(id)
 );
 
---after giving us additional info
 CREATE TABLE user_profiles(
     id SERIAL PRIMARY KEY,
     age  INT,

@@ -33,83 +33,63 @@ app.use(function(req, res, next) {
 app.use(express.static("./public"));
 
 //////RENDERS MAIN PAGE IF YOU'RE NOT LOGGED IN, RENDERS ADDITIONAL INFO IF YOU DELETED YOUR PROFILE//////
-app.get("/", (req, res) => {
-    if (!req.session.userID) {
-        res.render("home", {
-            deleted: req.query.deleted_all
-        });
-    } else {
-        res.redirect("/petition");
-    }
+app.get("/", needNoUserID, (req, res) => {
+    res.render("home", {
+        deleted: req.query.deleted_all
+    });
 });
 
-app.get("/registration", function(req, res) {
-    //if the user is not already registered/logged in, this unique cookie is set at the moment of log in/registration
-    //if the cookie is not set you have access to the login and registration page
-    if (!req.session.userID) {
-        res.render("registration");
-        //if the user already signed up/logged in we redirect to petition which in turn will check whether they have
-        //already signed or not
-    } else {
-        res.redirect("/petition");
-    }
+app.get("/registration", needNoUserID, function(req, res) {
+    res.render("registration");
 });
 
 //what do we do with the registration data?
 app.post("/registration", function(req, res) {
-    //we hash the provided password and then we insert a user into the db
-    //req.body.pass comes from the registration form input fields to which we gave a name
-    //if there is no password, it will go to catch
-    //QUESTION: how come hashPassword is a promise if we didnt promosify it and didnt create a promise object?
-    //if it's automatically a promise without us specifying it, why do we still need to return the
-    //value when defining the function in the first place? isn't it resolving with the value?
-
-    //if there was a password it was take the result of hash password function (hashed password) and runs
-    //a function on it where it returns the result of the createUser function (which inserts user into
-    //the user database and returns some data for us to set the unique cookies to remember the user). we have to
-    //return the values to use in the function declaration and here again
-    db.hashPassword(req.body.pass)
-        .then(function(hash) {
-            return db.createUser(
-                req.body.first,
-                req.body.last,
-                req.body.email,
-                hash
-            );
-        })
-        //then we take the returned data from the database and
-        //set the cookies to know that this user is registered and his session is running.
-        //every user gets a unique id
-        //when users log in they will get the same cookies identifying them because it comes from a database, from their row
-        //results.rows is the array containing the actual rows of the database that satisfy our query.
-        //every row is an object. even if there is only one row returned we still have to access it by
-        //result.rows[0] because we need to access the json like object
-        //results on its own also contains tons of other data
-        .then(function(result) {
-            req.session.userID = result.rows[0].id;
-            req.session.first = result.rows[0].first;
-            req.session.last = result.rows[0].last;
-        })
-        //then they are redirected to the signature page
-        .then(function() {
-            res.redirect("/onboarding"); //this was "/petition"
-        })
-        //or render the page but passing it an error which the template will interpret
-        .catch(function(err) {
-            console.log("ERROR IN REGISTRATION: ", err);
-            res.render("registration", {
-                error: err
+    if (req.body.pass) {
+        db.hashPassword(req.body.pass)
+            .then(function(hash) {
+                return db.createUser(
+                    req.body.first,
+                    req.body.last,
+                    req.body.email,
+                    hash
+                );
+            })
+            //then we take the returned data from the database and
+            //set the cookies to know that this user is registered and his session is running.
+            //every user gets a unique id
+            //when users log in they will get the same cookies identifying them because it comes from a database, from their row
+            //results.rows is the array containing the actual rows of the database that satisfy our query.
+            //every row is an object. even if there is only one row returned we still have to access it by
+            //result.rows[0] because we need to access the json like object
+            //results on its own also contains tons of other data
+            .then(function(result) {
+                req.session.userID = result.rows[0].id;
+                req.session.first = result.rows[0].first;
+                req.session.last = result.rows[0].last;
+            })
+            .then(function() {
+                res.redirect("/onboarding");
+            })
+            .catch(function(err) {
+                console.log("ERROR IN REGISTRATION: ", err);
+                res.render("registration", {
+                    error: err
+                });
             });
+    } else {
+        res.render("registration", {
+            error: "true"
         });
+    }
 });
 
 ////additional information////
-app.get("/onboarding", (req, res) => {
-    if (req.session.userID && !req.session.addedInfo) {
+app.get("/onboarding", needUserID, (req, res) => {
+    if (!req.session.addedInfo) {
         //add a cookie for having filled these out so that if they are filled out you are redirected
         res.render("onboarding");
     } else {
-        //if they are not signed it redirect them to the main page
         res.redirect("/");
     }
 });
@@ -126,6 +106,7 @@ app.post("/onboarding", (req, res) => {
                 req.session.userID
             )
             .then(function() {
+                req.session.addedInfo = "true";
                 res.redirect("/petition");
             });
     }
@@ -133,22 +114,14 @@ app.post("/onboarding", (req, res) => {
 
 ///////////////login////////////
 
-app.get("/login", function(req, res) {
-    //if the user is not already registered/logged in, this unique cookie is set at the moment of log in/registration
-    //if the cookie is not set you have access to the login and registration page
-    if (!req.session.userID) {
-        res.render("login");
-    } else {
-        //petition will check whether the user signed or not
-        res.redirect("/petition");
-    }
+app.get("/login", needNoUserID, function(req, res) {
+    res.render("login");
 });
 
 //what do we do with the data when we log in?
 
 //prettier-ignore
 app.post("/login", function(req, res) {
-    //first we take the email value from the form tag and then select their whole data from the database
     db
         .getUser(req.body.email)
         .then(function(results) {
@@ -197,14 +170,10 @@ app.post("/login", function(req, res) {
 });
 
 ////////////showing the petition page with the signature///////////
-app.get("/petition", function(req, res) {
-    if (!req.session.signed) {
-        res.render("petition", {
-            deleted: req.query.deleted
-        });
-    } else {
-        res.redirect("/thanks");
-    }
+app.get("/petition", needUserID, needNoSig, function(req, res) {
+    res.render("petition", {
+        deleted: req.query.deleted
+    });
 });
 
 //what do we do with the siganture on the petition page?
@@ -229,22 +198,18 @@ app.post("/petition", function(req, res) {
 //here we check whether the user signed and is logged in
 // then we want to a promise all because we need two promises to resolve before we can render the page
 //we need get signers to get the lebgth of the array and get signature to present it
-app.get("/thanks", function(req, res) {
-    if (req.session.signed && req.session.userID) {
-        Promise.all([db.showSigners(), db.getSignature(req.session.userID)])
-            .then(function([resultSigners, resultSig]) {
-                res.render("thanks", {
-                    length: resultSigners.rows.length,
-                    url: resultSig.rows[0].sig,
-                    name: resultSig.rows[0].first
-                });
-            })
-            .catch(function(err) {
-                console.log("ERROR IN THANKs", err);
+app.get("/thanks", needUserID, needSig, function(req, res) {
+    Promise.all([db.showSigners(), db.getSignature(req.session.userID)])
+        .then(function([resultSigners, resultSig]) {
+            res.render("thanks", {
+                length: resultSigners.rows.length,
+                url: resultSig.rows[0].sig,
+                name: resultSig.rows[0].first
             });
-    } else {
-        res.redirect("/");
-    }
+        })
+        .catch(function(err) {
+            console.log("ERROR IN THANKs", err);
+        });
 });
 
 //deleting signatures
@@ -259,32 +224,28 @@ app.post("/signature/delete", (req, res) => {
         });
 });
 
-app.get("/signers", function(req, res) {
-    if (req.session.signed && req.session.userID) {
-        db.showSigners()
-            .then(function(result) {
-                //loop here to check whether urls are ok
-                result.rows.forEach(obj => {
-                    if (obj.url) {
-                        if (
-                            obj.url.indexOf("http://") == -1 ||
-                            obj.url.indexOf("https://" == -1)
-                        ) {
-                            obj.url = "http://" + obj.url;
-                        }
+app.get("/signers", needUserID, needSig, function(req, res) {
+    db.showSigners()
+        .then(function(result) {
+            //loop here to check whether urls are ok
+            result.rows.forEach(obj => {
+                if (obj.url) {
+                    if (
+                        obj.url.indexOf("http://") == -1 ||
+                        obj.url.indexOf("https://" == -1)
+                    ) {
+                        obj.url = "http://" + obj.url;
                     }
-                });
-
-                res.render("signers", {
-                    results: result.rows
-                });
-            })
-            .catch(function(err) {
-                console.log("error in signers ", err);
+                }
             });
-    } else {
-        res.redirect("/");
-    }
+
+            res.render("signers", {
+                results: result.rows
+            });
+        })
+        .catch(function(err) {
+            console.log("error in signers ", err);
+        });
 });
 
 app.get("/signers/:city", function(req, res) {
@@ -310,20 +271,16 @@ app.get("/signers/:city", function(req, res) {
 });
 
 ////edit profile
-app.get("/edit", (req, res) => {
-    if (req.session.userID) {
-        db.fillTheForm(req.session.userID)
-            .then(function(result) {
-                res.render("editprofile", {
-                    results: result.rows[0]
-                });
-            })
-            .catch(function(err) {
-                console.log("ERROR IN EDIT ", err);
+app.get("/edit", needUserID, (req, res) => {
+    db.fillTheForm(req.session.userID)
+        .then(function(result) {
+            res.render("editprofile", {
+                results: result.rows[0]
             });
-    } else {
-        res.redirect("/");
-    }
+        })
+        .catch(function(err) {
+            console.log("ERROR IN EDIT ", err);
+        });
 });
 
 app.post("/edit", (req, res) => {
@@ -403,26 +360,39 @@ app.get("/logout", function(req, res) {
     res.redirect("/");
 });
 
-app.listen(8080, () => ca.rainbow("Big Brother is listening!"));
+app.listen(process.env.PORT || 8080, () =>
+    ca.rainbow("Big Brother is listening!")
+);
 
-//where the form is is up to us, where to redirect also
-//when the user submits the form update the users table
-//get route: joined query (u and up), prepopulate the form with the information
-//first, last, pass, email --> UPDATE because they already have some stuff --> how many do we update? password field
-//will be blank and we need to manually see whether they typed something or not and then either hash or update three fields
-//if req.body.pass is not an empty string we need to hash it again and update 4 instead of 3
-//INSERT OR UPDATE for the user profile, conflict will be on user_id (foreign key)
-//after deleting signature forward to petition, not thank you
-// <form method="POST">
-//cref
-//<button>Delete your sig</button> --> must be a submit button in a form but we can style it however
-//app.get(sig/delete) db.deleteSig(req.session.userID).then.catch
-//you can delete your entire account as a bonus. three quieries
-//DELETE FROM table WHERE name = something;
-//UPDATE singers
-//SET name = "sometheing", age=100
-//WHERE something
+////////////////custom middleware to faciliate some of the syntax///
+function needNoUserID(req, res, next) {
+    if (req.session.userID) {
+        res.redirect("/petition");
+    } else {
+        next();
+    }
+}
 
-//we can also replace the onboarding with upsert to avoid double key violations
-//we have to do two queries on the same route. we can do them subseqentially, but really we want them at the same time
-//promise.all
+function needUserID(req, res, next) {
+    if (!req.session.userID) {
+        res.redirect("/");
+    } else {
+        next();
+    }
+}
+
+function needSig(req, res, next) {
+    if (!req.session.signed) {
+        res.redirect("/petition");
+    } else {
+        next();
+    }
+}
+
+function needNoSig(req, res, next) {
+    if (req.session.signed) {
+        res.redirect("/thanks");
+    } else {
+        next();
+    }
+}

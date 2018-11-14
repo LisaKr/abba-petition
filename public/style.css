@@ -12,6 +12,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     cursor: auto;
+    perspective: 1000px;
 }
 
 /*NOTIFICATION AT THE MAIN PAGE AFTER DELETING YOUR ACCOUNT*/
@@ -36,22 +37,15 @@ h3 {
 
 .button {
     font-size: 1em;
-    /* width: 25%; */
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    width: 20%;
+    margin: 20px;
     background: #f0af5f;
     padding: 10px;
     display: inline-block;
     font-family: "Julius Sans One";
     color: white;
-    /* text-shadow: 0 0 1px rgba(255, 255, 255, 0.3); */
-    /* border: 1px solid black; */
-    /* transition-property: width, height, transform, background, font-size,
-        opacity;
-    transition-duration: 1s, 1s, 1s, 1s, 1s, 1s; */
-    /* box-shadow: 0 0 2px rgba(0, 0, 0, 0.5); */
+    border-width: 0;
+    text-align: center;
 }
 
 .big {
@@ -69,10 +63,28 @@ a {
     color: #00ac00;
 }
 
-a:hover,
-.button:hover {
+a:hover {
     text-decoration: underline;
     cursor: pointer;
+    color: #007200;
+}
+
+/*overriding other links*/
+.button a:hover {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.button:after {
+    display: block;
+    content: "";
+    border-bottom: solid 2px white;
+    transform: scaleX(0);
+    transition: transform 0.25s ease-in-out;
+}
+.button:hover:after {
+    transform: scaleX(1);
 }
 
 /*Fields to put stuff in*/
@@ -91,6 +103,7 @@ input {
     font-size: 16px;
     font-family: "Archivo Narrow";
     letter-spacing: 1px;
+    text-align: center;
 }
 
 .container {
@@ -100,6 +113,17 @@ input {
     font-size: 1.2em;
     line-height: 1.2;
 }
+
+/* .test {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.2em;
+    line-height: 1.2;
+    transition: all ease 0.5s;
+    transform-style: preserve-3d;
+} */
 
 .error {
     color: #88304e;
@@ -140,7 +164,7 @@ audio {
     flex-direction: column;
     align-items: center;
     width: 25%;
-    background-color: #928a97;
+    background-color: rgb(164, 163, 167);
     position: fixed;
     right: 0;
     z-index: 99999;
@@ -155,6 +179,7 @@ audio {
     align-self: flex-end;
     padding-right: 15px;
     color: #0c056d;
+    cursor: pointer;
 }
 
 /*////////////*/
@@ -167,4 +192,5 @@ img {
 
 .logout {
     background: #3eac51;
+    width: 30%;
 }

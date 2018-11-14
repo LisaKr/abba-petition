@@ -1,7 +1,10 @@
 const spicedPg = require("spiced-pg");
 const bcrypt = require("./bcrypt");
 
-const db = spicedPg("postgres:postgres:postgres@localhost:5432/petition");
+const db = spicedPg(
+    process.env.DATABASE_URL ||
+        "postgres:postgres:postgres@localhost:5432/petition"
+);
 
 /////Creating a user after the registration and getting the user when they log in/////////
 
