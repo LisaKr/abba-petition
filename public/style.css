@@ -16,8 +16,13 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
     line-height: 1.5;
+}
+
+h3 {
+    font-family: "Archivo Narrow";
 }
 
 img {
@@ -127,6 +132,18 @@ input {
     text-align: center;
     font-size: 1.2em;
     line-height: 1.2;
+}
+
+/*LOOK OF THE SURPRISE HANDLEBAR TEMPLATE*/
+.content {
+    width: 65%;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(10deg, #b8c4d3 50%, #c5e0be 50%);
+    padding: 10px;
 }
 
 /*HAMBURGER SLIDING MENU*/

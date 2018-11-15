@@ -361,6 +361,41 @@ app.post("/delete", (req, res) => {
         });
 });
 
+///////////////////////RANDOM ABBA FACT//////////////////////
+app.get("/surprise", (req, res) => {
+    //generating a random number for the random abba fact
+    let number = getRandomInt(7);
+    if (number == 1) {
+        res.render("surprise", {
+            video: true
+        });
+    } else if (number == 2) {
+        res.render("surprise", {
+            fact1: true
+        });
+    } else if (number == 3) {
+        res.render("surprise", {
+            fact2: true
+        });
+    } else if (number == 4) {
+        res.render("surprise", {
+            video2: true
+        });
+    } else if (number == 5) {
+        res.render("surprise", {
+            fact3: true
+        });
+    } else if (number == 6) {
+        res.render("surprise", {
+            fact4: true
+        });
+    } else if (number == 7) {
+        res.render("surprise", {
+            video3: true
+        });
+    }
+});
+
 //////////////LOG OUT////////////////
 app.get("/logout", function(req, res) {
     req.session = null;
@@ -403,4 +438,8 @@ function needNoSig(req, res, next) {
     } else {
         next();
     }
+}
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
 }

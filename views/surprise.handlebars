@@ -1,0 +1,66 @@
+<div class="header">
+    <img class="nav" src="/hamburger.png" />
+    <div class="dropdown invisible">
+        <div class="closing">X</div>
+        <a href="/signers"><button class="button big">See all {{length}} signers</button></a>
+        <form method="POST" action="/signature/delete">
+            <button type="submit" class="button big">Delete your signature</button>
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        </form>
+        {{>menu}}
+    </div>
+</div>
+
+{{#if video}}
+    <br /><br /><br />
+    <div class="content">
+        <h2>Treat yourself to a dancing break!</h2>
+
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/unfzfe8f9NI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+{{/if}}
+
+{{#if video2}}
+    <br /><br /><br />
+    <div class="content">
+        <h2>How about a great movie with ABBA songs?</h2>
+
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/8RBNHdG35WY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+{{/if}}
+
+{{#if video3}}
+    <br /><br /><br />
+    <div class="content">
+        <h2>Treat yourself to a dancing break!</h2>
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/xFrGuyw1V8s" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+{{/if}}
+
+{{#if fact1}}
+    <div class="content">
+        <h2>Did you know?....</h2>
+        <h3>Before they were “ABBA” (the initials of their first names), the band was known as “Festfolk,” meaning “party people” in Swedish.</h3>
+    </div>
+{{/if}}
+
+{{#if fact2}}
+    <div class="content">
+        <h2>Did you know?....</h2>
+        <h3>ABBA’s greatest hits album, Gold, is one of the best-selling records of all time.</h3>
+    </div>
+{{/if}}
+
+{{#if fact3}}
+    <div class="content">
+        <h2>Did you know?....</h2>
+        <h3>Anni-Frid (the brunette) isn't actually Swedish. Her mother was Norwegian and became involved with a German soldier during World War II. They left Norway shortly after Anni-Frid’s birth in 1945.</h3>
+    </div>
+{{/if}}
+
+{{#if fact4}}
+    <div class="content">
+        <h2>Did you know?....</h2>
+        <h3>Abba is also the name of a seafood company in Sweden.
+        ABBA the band had to get permission from ABBA the seafood company to use their name (not the other way around).</h3>
+{{/if}}
