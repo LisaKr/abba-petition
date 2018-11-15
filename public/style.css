@@ -148,7 +148,7 @@ audio {
 
 .visible {
     left: 75%;
-    transition: left 0.5s linear;
+    transition: left 0.3s linear;
 }
 
 .dropdown {
