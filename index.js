@@ -20,7 +20,8 @@ app.use(
 //session secret is a key used for signing and/or encrypting cookies set by the application to maintain session state
 app.use(
     cookieSession({
-        secret: process.env.COOKIE_SECRET,
+        secret:
+            process.env.COOKIE_SECRET || require("./secrets.json").cookieSecret,
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
@@ -32,8 +33,8 @@ app.use(function(req, res, next) {
     res.locals.csrfToken = req.csrfToken();
     next();
 });
-//////
 
+//////serving all the static files
 app.use(express.static("./public"));
 
 app.disable("x-powered-by");
@@ -50,6 +51,10 @@ app.get("/registration", needNoUserID, function(req, res) {
     res.render("registration");
 });
 
+//hashing the provided password, inserting provided data into database (table: users), setting individual cookies
+//for the session and redirecting the user to the onboarding page. if password isn't provided or any other error occurs,
+//same page is rendered with an error message.
+//password has to be provided because otherwise only salt will be hashed and added to database
 app.post("/registration", function(req, res) {
     if (req.body.pass) {
         db.hashPassword(req.body.pass)
@@ -77,21 +82,23 @@ app.post("/registration", function(req, res) {
             });
     } else {
         res.render("registration", {
-            error: "true"
+            password_error: "true"
         });
     }
 });
 
-////additional information////
+///////////////ADDING ADDITIONAL INFORMATION///////////
 app.get("/onboarding", needUserID, (req, res) => {
+    //if this form has already been filled out the user is not allowed to visit the page. this cookie is set in this post route.
     if (!req.session.addedInfo) {
-        //add a cookie for having filled these out so that if they are filled out you are redirected
         res.render("onboarding");
     } else {
         res.redirect("/");
     }
 });
 
+///in case the user left all the fields empty they will be redirected to the petition. if at least one of the fields
+///was filled out the data will be inserted into user_profiles, the respective cookie will be set and then user is redirected
 app.post("/onboarding", (req, res) => {
     if (!req.body.age && !req.body.city && !req.body.url) {
         res.redirect("/petition");
@@ -110,15 +117,20 @@ app.post("/onboarding", (req, res) => {
     }
 });
 
-///////////////login////////////
+/////////////////////LOGIN//////////////////
 
 app.get("/login", needNoUserID, function(req, res) {
     res.render("login");
 });
 
-//what do we do with the data when we log in?
-
 //prettier-ignore
+
+///Users data is retrieved from all three tables by the provided email adress. The provided password is then hashed and
+//compared to the hash in the database. In case it is a match respective individual cookies for this session will be set
+//and it is checked whether this user has already filled out the additional onboarding information. If yes, a respective
+//cookie will be set. Then it's checled whether this user already has an entry in the signature table. The user is redirected
+//based on this information.
+//If the password doesn't match an error is thrown and the page is rendered with an error message.
 app.post("/login", function(req, res) {
     db
         .getUser(req.body.email)
@@ -140,11 +152,7 @@ app.post("/login", function(req, res) {
                     }
                 });
         }).
-        //now we have the resolved result of checkForSig so that we can check what it was and act accordingly
         then(function(){
-            //check whether the user already has filled out the onboarding to prevent them from going to this page in that case
-
-            //if there is a signature
             if (req.session.sigID) {
                 req.session.signed = "true";
                 res.redirect("/thanks");
@@ -160,20 +168,18 @@ app.post("/login", function(req, res) {
         });
 });
 
-////////////showing the petition page with the signature///////////
+////////////SIGNATURE PAGE///////////
 app.get("/petition", needUserID, needNoSig, function(req, res) {
     res.render("petition", {
         deleted: req.query.deleted
     });
 });
 
-//what do we do with the siganture on the petition page?
-
+//The stringified value of the canvas signature is added to the hidden input field with the name "sig". The value is then
+//added to the signatures tables along with the respective user_id. A respective cookie is set and the user is redirected.
+//If there is a problem, same page is rendered with an error message.
 app.post("/petition", function(req, res) {
-    //here the only new data we need is the canvas data to url value which we assigned to be the value of the hidden input form
-    //the rest we are getting from the cookies for now
     db.addSig(req.body.sig, req.session.userID)
-        //then we are adding a cookie signifying that the user has signed it and it is saved with his information so we know it next time
         .then(function() {
             req.session.signed = "true";
             res.redirect("/thanks");
@@ -186,9 +192,9 @@ app.post("/petition", function(req, res) {
         });
 });
 
-//here we check whether the user signed and is logged in
-// then we want to a promise all because we need two promises to resolve before we can render the page
-//we need get signers to get the lebgth of the array and get signature to present it
+///////////////////////THANK YOU PAGE///////////////////////////////
+//To render this page we need results of two queries: to get how many people signed the petition and to retrieve the
+//signature string to pass to the url of the image tag which we show on our page and to get the name of the current signer.
 app.get("/thanks", needUserID, needSig, function(req, res) {
     Promise.all([db.showSigners(), db.getSignature(req.session.userID)])
         .then(function([resultSigners, resultSig]) {
@@ -203,22 +209,12 @@ app.get("/thanks", needUserID, needSig, function(req, res) {
         });
 });
 
-//deleting signatures
-app.post("/signature/delete", (req, res) => {
-    db.deleteSig(req.session.userID)
-        .then(function() {
-            req.session.signed = null;
-            res.redirect("/petition?deleted=true");
-        })
-        .catch(function(err) {
-            console.log(err);
-        });
-});
-
+//////////////////////////GETTING ALL SIGNERS/////////////////////////////////
+//getting all the rows from the signature table and rendering the template based on that.
 app.get("/signers", needUserID, needSig, function(req, res) {
     db.showSigners()
         .then(function(result) {
-            //loop here to check whether urls are ok
+            //checking whether provided urls start with http or https and add the prefix if they don't
             result.rows.forEach(obj => {
                 if (obj.url) {
                     if (
@@ -239,10 +235,12 @@ app.get("/signers", needUserID, needSig, function(req, res) {
         });
 });
 
+////////////////SHOWING SIGNERS OF SPECIFIC CITY///////////////
+//getting city to pass to the db query from the url query
 app.get("/signers/:city", function(req, res) {
     db.signersByCity(req.params.city)
         .then(function(result) {
-            //loop here to check whether urls are ok
+            //checking whether provided urls start with http or https and add the prefix if they don't
             result.rows.forEach(obj => {
                 if (
                     obj.url.indexOf("http://") == -1 ||
@@ -261,7 +259,8 @@ app.get("/signers/:city", function(req, res) {
         });
 });
 
-////edit profile
+//////////////EDIT PROFILE/////////////////
+//filling the fields with preexisting data to this user
 app.get("/edit", needUserID, (req, res) => {
     db.fillTheForm(req.session.userID)
         .then(function(result) {
@@ -274,6 +273,8 @@ app.get("/edit", needUserID, (req, res) => {
         });
 });
 
+//depending on whether the user updates password or not we are using different queries to the users table (this information is already there)
+//additionally we upsert the user_profile table (this information might or might not alrady be there)
 app.post("/edit", (req, res) => {
     //if the user typed anything in the password field we need to hash it and update 4 fields
     if (req.body.pass) {
@@ -326,7 +327,23 @@ app.post("/edit", (req, res) => {
     }
 });
 
-//deleting profile
+////////////DELETING THE SIGNATURE///////////////
+//The row with the respective user_id is deleted from the signatures table. The respective cookie is deleted and
+//the user is redirected to the signature page with an according message.
+app.post("/signature/delete", (req, res) => {
+    db.deleteSig(req.session.userID)
+        .then(function() {
+            req.session.signed = null;
+            res.redirect("/petition?deleted=true");
+        })
+        .catch(function(err) {
+            console.log(err);
+        });
+});
+
+//////////DELETING PROFILE///////////////////
+//deleting data from all tables in a proper order, deleting cookies and redirecting to the main page with an appropriate
+//message
 app.post("/delete", (req, res) => {
     db.deleteInfoFromSignatureTable(req.session.userID)
         .then(function() {
@@ -344,18 +361,18 @@ app.post("/delete", (req, res) => {
         });
 });
 
-//logout
-
+//////////////LOG OUT////////////////
 app.get("/logout", function(req, res) {
     req.session = null;
     res.redirect("/");
 });
 
+///////////STARTING THE SERVER/////////////
 app.listen(process.env.PORT || 8080, () =>
     ca.rainbow("Big Brother is listening!")
 );
 
-////////////////custom middleware to faciliate some of the syntax///
+////////////////CUSTOM MIDDLEWARE TO FASCILITATE SYNTAX/////////////
 function needNoUserID(req, res, next) {
     if (req.session.userID) {
         res.redirect("/petition");

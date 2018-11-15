@@ -6,7 +6,7 @@ const db = spicedPg(
         "postgres:postgres:postgres@localhost:5432/petition"
 );
 
-/////Creating a user after the registration and getting the user when they log in/////////
+////////////////CREATING A USER AFTER THE REGISTRATION///////////////
 
 exports.createUser = function createUser(first, last, email, pass) {
     return db.query(
@@ -17,6 +17,7 @@ exports.createUser = function createUser(first, last, email, pass) {
     );
 };
 
+/////////////////ADD ADDITIONAL INFORMATION TO USER_PROFILES TABLE/////////////
 exports.addInfo = function addInfo(age, city, url, user_id) {
     return db.query(
         `INSERT INTO user_profiles (age, city, url, user_id)
@@ -27,6 +28,7 @@ exports.addInfo = function addInfo(age, city, url, user_id) {
 };
 
 // prettier-ignore
+///////////////////GETTING THE USER'S DATA WHEN THEY LOG IN///////////
 module.exports.getUser = function getUser(email) {
     return db.query(
         `
@@ -41,8 +43,7 @@ module.exports.getUser = function getUser(email) {
     );
 };
 
-///adding a signature string after the user signs/////////
-//right now we are adding first and last even tho its redundant with the users table. we'll fix it on monday.
+//////////////////////ADDING A SIGNATURE STRING TO THE SIGNATURE TABLE AFTER THE USER SIGNS THE PETITION/////////////
 exports.addSig = function(sig, user_id) {
     return db.query(
         `INSERT INTO signatures (sig, user_id)
@@ -52,18 +53,7 @@ exports.addSig = function(sig, user_id) {
     );
 };
 
-//delete Sig
-exports.deleteSig = function(id) {
-    return db.query(
-        `
-        DELETE
-        FROM signatures
-        WHERE user_id = $1`,
-        [id]
-    );
-};
-
-///showing you your own signature after signing///
+/////////////////SHOWING SIGNATURE AFTER SIGNING//////////
 exports.getSignature = function getSignature(id) {
     return db.query(
         `
@@ -76,7 +66,7 @@ exports.getSignature = function getSignature(id) {
     );
 };
 
-///showing all users from the signatures table/////
+///////////////////SHOWING ALL THE SIGNERS////////////////
 exports.showSigners = function() {
     return db.query(
         `SELECT users.first, users.last, up.age, up.city, up.url
@@ -89,7 +79,7 @@ exports.showSigners = function() {
     );
 };
 
-///get signers by city
+/////////SHOWING SIGNERS OF SPECIFIC CITY/////////////////////
 
 exports.signersByCity = function signersByCity(city) {
     return db.query(
@@ -106,7 +96,20 @@ exports.signersByCity = function signersByCity(city) {
     );
 };
 
-/////populate the edit form with the existing data from the db////
+//////////////////////////ADDITIONAL FEATURES///////////////////////////////////
+
+//////////////DELETING SIGNATURE FROM SIGNATURE TABLE///////////////
+exports.deleteSig = function(id) {
+    return db.query(
+        `
+        DELETE
+        FROM signatures
+        WHERE user_id = $1`,
+        [id]
+    );
+};
+
+/////POPULATE THE EDIT FORM WITH THE EXISTING USER DATA FROM THE DB////
 exports.fillTheForm = function fillTheForm(id) {
     return db.query(
         `SELECT users.first, users.last, users.email, users.pass, up.age, up.city, up.url
@@ -119,7 +122,7 @@ exports.fillTheForm = function fillTheForm(id) {
 };
 
 // prettier-ignore
-///update the data, this one is 100% update  because this data already exists /////
+///////////UPDATE THE DATA IN THE USER_TABLE AFTER EDITING THE PROFILE (WITH PASSWORD)///////
 exports.updateUserTableWithPassword = function updateUserTableWithPassword(
     first,
     last,
@@ -135,7 +138,7 @@ exports.updateUserTableWithPassword = function updateUserTableWithPassword(
     );
 };
 
-//now without password
+///////////UPDATE THE DATA IN THE USER_TABLE AFTER EDITING THE PROFILE (WITHOUT PASSWORD)///////
 exports.updateUserTableNoPassword = function updateUserTableNoPassword(
     first,
     last,
@@ -151,7 +154,7 @@ exports.updateUserTableNoPassword = function updateUserTableNoPassword(
     );
 };
 
-//insert/update the user_profile table////
+///////////UPSERT DATA IN THE USER_PROFILES TABLE AFTER EIDITING PROFILE/////////////////
 exports.updateUserProfileTable = function updateUserProfileTable(
     age,
     city,
@@ -169,7 +172,7 @@ exports.updateUserProfileTable = function updateUserProfileTable(
     );
 };
 
-//queries to delete whole profile
+//////////////////DELETING WHOLE PROFILE////////////////////////////
 exports.deleteInfoFromUserTable = function deleteInfoFromUserTable(id) {
     return db.query(
         `
@@ -201,7 +204,7 @@ exports.deleteInfoFromSignatureTable = function deleteInfoFromSignatureTable(
     );
 };
 
-/////////////hashing passwords////////////////////////
+/////////////////////HASHING PASSWORDS////////////////////////
 exports.hashPassword = function hashPassword(textPass) {
     return bcrypt.hash(textPass);
 };
