@@ -407,6 +407,11 @@ app.listen(process.env.PORT || 8080, () =>
     ca.rainbow("Big Brother is listening!")
 );
 
+//////GENERATE A RANDOM NUMBER FOR THE PAGE WITH ABBA FACTS//////
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 ////////////////CUSTOM MIDDLEWARE TO FASCILITATE SYNTAX/////////////
 function needNoUserID(req, res, next) {
     if (req.session.userID) {
@@ -438,8 +443,4 @@ function needNoSig(req, res, next) {
     } else {
         next();
     }
-}
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * Math.floor(max));
 }

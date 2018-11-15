@@ -16,12 +16,11 @@ body {
 
 h1,
 h2,
-h3,
-h4 {
+h3 {
     line-height: 1.5;
 }
 
-h3 {
+.different-text {
     font-family: "Archivo Narrow";
 }
 
@@ -59,6 +58,7 @@ audio {
     color: white;
     border-width: 0;
     text-align: center;
+    cursor: pointer;
 }
 
 .big {
@@ -70,9 +70,12 @@ audio {
     width: 30%;
 }
 
-/*Links inside buttons should be white, unlike normal links which are green*/
-.button a {
-    color: white;
+.bottom {
+    position: absolute;
+    top: 85%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35%;
 }
 
 /* Normal links should be green*/
@@ -87,6 +90,10 @@ a:hover {
     color: #007200;
 }
 
+/*Links inside buttons should be white, unlike normal links which are green*/
+.button a {
+    color: white;
+}
 /*overriding the style for hovering over other links*/
 .button a:hover {
     text-decoration: none;
