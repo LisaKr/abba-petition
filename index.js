@@ -371,27 +371,27 @@ app.get("/surprise", (req, res) => {
         });
     } else if (number == 2) {
         res.render("surprise", {
-            fact1: true
+            video2: true
         });
     } else if (number == 3) {
         res.render("surprise", {
-            fact2: true
+            video3: true
         });
     } else if (number == 4) {
         res.render("surprise", {
-            video2: true
+            fact1: true
         });
     } else if (number == 5) {
         res.render("surprise", {
-            fact3: true
+            fact2: true
         });
     } else if (number == 6) {
         res.render("surprise", {
-            fact4: true
+            fact3: true
         });
     } else if (number == 7) {
         res.render("surprise", {
-            video3: true
+            fact4: true
         });
     }
 });
