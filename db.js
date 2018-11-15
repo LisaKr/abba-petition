@@ -30,10 +30,12 @@ exports.addInfo = function addInfo(age, city, url, user_id) {
 module.exports.getUser = function getUser(email) {
     return db.query(
         `
-        SELECT u.id as id, u.pass, u.first, u.last, sig.id as sig_id, sig.user_id
+        SELECT u.id as id, u.pass, u.first, u.last, sig.id as sig_id, sig.user_id, up.user_id as up_id
         FROM users AS u
         LEFT JOIN signatures AS sig
-        ON sig.user_id = u.id
+        ON u.id = sig.user_id
+        LEFT JOIN user_profiles AS up
+        ON u.id = up.user_id
         WHERE email = $1`,
         [email]
     );
@@ -61,7 +63,7 @@ exports.deleteSig = function(id) {
     );
 };
 
-///showing you your own signature after signing/// //JOIN USER TABLE HERE TO GET A NAME FOR THE THANKS TEMPLATE
+///showing you your own signature after signing///
 exports.getSignature = function getSignature(id) {
     return db.query(
         `
