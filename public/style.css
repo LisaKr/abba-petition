@@ -1,36 +1,44 @@
 /*GENERAL LOOK*/
-
-html {
+html,
+body {
     height: 100%;
 }
+
 body {
     margin: 0;
     background: linear-gradient(10deg, #d0e9c9 50%, #cfdced 50%);
     font-family: "Julius Sans One";
     color: #0c056d;
-    height: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
     cursor: auto;
-    perspective: 1000px;
-}
-
-/*NOTIFICATION AT THE MAIN PAGE AFTER DELETING YOUR ACCOUNT*/
-.notification {
-    color: #00ac00;
-    font-family: "Archivo Narrow";
 }
 
 h1,
 h2,
 h3 {
     line-height: 1.5;
-    /* color: white;
-    text-shadow: #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
-        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
-        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
-        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px,
-        #000 0px 0px 1px, #000 0px 0px 1px, #000 0px 0px 1px; */
+}
+
+img {
+    width: 400px;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+/*NOTIFICATION AND ERRORS*/
+.notification {
+    color: #00ac00;
+    font-family: "Archivo Narrow";
+}
+
+.error {
+    color: #88304e;
+    font-weight: bold;
+}
+
+audio {
+    display: none;
 }
 
 /*BUTTONS*/
@@ -52,7 +60,12 @@ h3 {
     width: 200px;
 }
 
-/*Links inside buttons should we white*/
+.logout {
+    background: #3eac51;
+    width: 30%;
+}
+
+/*Links inside buttons should be white, unlike normal links which are green*/
 .button a {
     color: white;
 }
@@ -69,12 +82,13 @@ a:hover {
     color: #007200;
 }
 
-/*overriding other links*/
+/*overriding the style for hovering over other links*/
 .button a:hover {
     text-decoration: none;
     color: white;
 }
 
+/*white underline from the middle on hover*/
 .button:after {
     display: block;
     content: "";
@@ -86,11 +100,7 @@ a:hover {
     transform: scaleX(1);
 }
 
-.nav {
-    cursor: pointer;
-}
-
-/*Fields to put stuff in*/
+/*INPUT FIELDS*/
 
 input,
 #signature,
@@ -109,6 +119,8 @@ input {
     text-align: center;
 }
 
+/*LOOK OF ALL THE HANDLEBARS TEMPLATES*/
+
 .container {
     width: 50%;
     margin: 0 auto;
@@ -117,16 +129,7 @@ input {
     line-height: 1.2;
 }
 
-.error {
-    color: #88304e;
-    font-weight: bold;
-}
-
-audio {
-    display: none;
-}
-
-/*hamburger menu*/
+/*HAMBURGER SLIDING MENU*/
 .header {
     height: 5em;
     margin-bottom: -1.5em;
@@ -140,6 +143,7 @@ audio {
     margin-top: 2em;
     margin-right: 2em;
     float: right;
+    cursor: pointer;
 }
 
 .invisible {
@@ -172,17 +176,4 @@ audio {
     padding-right: 15px;
     color: #0c056d;
     cursor: pointer;
-}
-
-/*////////////*/
-
-img {
-    width: 400px;
-    display: inline-block;
-    margin: 0 auto;
-}
-
-.logout {
-    background: #3eac51;
-    width: 30%;
 }
