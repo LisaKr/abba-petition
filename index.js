@@ -20,8 +20,7 @@ app.use(
 //session secret is a key used for signing and/or encrypting cookies set by the application to maintain session state
 app.use(
     cookieSession({
-        secret:
-            process.env.COOKIE_SECRET || require("./secrets.json").cookieSecret,
+        secret: process.env.COOKIE_SECRET,
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
