@@ -7,6 +7,7 @@ const ca = require("chalk-animation");
 const csurf = require("csurf");
 const cookieSession = require("cookie-session");
 const db = require("./db.js");
+// const redis = require("./redis.js");
 
 app.use(
     require("body-parser").urlencoded({
@@ -125,27 +126,18 @@ app.post("/login", function(req, res) {
     db
         .getUser(req.body.email)
         .then(function(results) {
-            //after we have gotten the users data from the database we utilise the compare password function
-            //and returning its result (password matched or not). if not we throw an error to make them go to
-            //catch
             return db.comparePassword(req.body.pass, results.rows[0].pass)
-            //here we have to chain another promise right on the result of this function because
-            //we need to have access to both data from the database and the result of the password
-            //comparison. otherwise we would only have the access to the boolean result
-            //if password is correct we set the cookies to remember the logged in user (for this we need data
-            //from database).
                 .then(function(match) {
                     if (match==true) {
                         req.session.userID = results.rows[0].id;
                         req.session.first = results.rows[0].first;
                         req.session.last = results.rows[0].last;
                         req.session.sigID = results.rows[0].sig_id;
-                        //as it is the prmose whose result will go into the next promise we return here
-                        //the result of a query which looks whether there is a signature for this user
-                        //it will be either data or empty
-                        //we have to return it here and check on it later because its a promise so that we
-                        //cannot take its results right away in an if loop (its still gonna be pending)
-                        // return db.checkForSig(req.session.userID);
+                        //here we check whether data from user_profiles was returned by that user_id from getUser and if yes,
+                        //we set the onboarding cookie to true
+                        if (results.rows[0].up_id) {
+                            req.session.addedInfo = "true";
+                        }
                     } else {
                         throw new Error;
                     }
@@ -153,6 +145,8 @@ app.post("/login", function(req, res) {
         }).
         //now we have the resolved result of checkForSig so that we can check what it was and act accordingly
         then(function(){
+            //check whether the user already has filled out the onboarding to prevent them from going to this page in that case
+
             //if there is a signature
             if (req.session.sigID) {
                 req.session.signed = "true";
