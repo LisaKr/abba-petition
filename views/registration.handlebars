@@ -1,16 +1,22 @@
 <div class="container">
 
-<br />
+    <br />
     <img src="/Abba.png" />
     <br />
-
-    <!-- <div class="text">
-        Reuniting ABBA is within our reach — but we can't do it alone.<br />
-        Please sign up to support our cause!
-    </div> -->
     <br />
+
+    <!-- this error is shown if the user did not provide one of the required fields -->
     {{#if error}}
         <div class="error">Oops! Something went wrong! Please try again. <br />Note that all fields must be filled out.</div>
+        <audio autoplay>
+            <source src="womp-womp.mp3" type="audio/mpeg">
+        </audio>
+        <br />
+    {{/if}}
+
+    <!-- this error is shown if the user hasn't provided the password -->
+    {{#if password_error}}
+        <div class="error">Uh oh! You must provide a password to proceed.</div>
         <audio autoplay>
             <source src="womp-womp.mp3" type="audio/mpeg">
         </audio>
@@ -33,7 +39,7 @@
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button type="submit" class="button">Sign Up</button>
     </form>
-<br />
+    <br />
     Already registered? Please <a href="/login"> log in </a> here.
     <br />
 </div>
