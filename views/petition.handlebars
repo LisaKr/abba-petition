@@ -7,28 +7,28 @@
 </div>
 
 <div class="container">
-            {{#if deleted}}
-            <div class="notification">We're sorry to see you go! If you change your mind you can always sign the petition here.</div>
-        {{/if}}
+    {{#if deleted}}
+        <div class="notification">We're sorry to see you go! If you change your mind you can always sign the petition here.</div>
+    {{/if}}
+    <br />
+    <img src="/Abba.png" /> <br />
+
+    <h3>Sign my petition to make ABBA perform at every Eurovision until the end of time!</h3> <br />
+
+    {{#if error}}
+        <div class="error">Oops! Something went wrong! Please try again later.</div>
+        <audio autoplay>
+            <source src="womp-womp.mp3" type="audio/mpeg">
+        </audio>
         <br />
-        <img src="/Abba.png" /><br />
+    {{/if}}
 
-        <h3>Sign my petition to make ABBA perform at every Eurovision until the end of time!</h3><br />
-
-        {{#if error}}
-            <div class="error">Oops! Something went wrong! Please try again later.</div>
-            <audio autoplay>
-                <source src="womp-womp.mp3" type="audio/mpeg">
-            </audio>
-            <br />
-        {{/if}}
-
-        <form method="POST">
-            Signature: <br/>
-            <input type="hidden" name="sig">
-            <canvas id="signature" width="300" height="50"></canvas><br/>
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button type="submit" class="button">I'm in!</button>
-        </form>
+    <form method="POST">
+        Signature: <br />
+        <input type="hidden" name="sig">
+        <canvas id="signature" width="300" height="50"></canvas><br />
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <button type="submit" class="button">I'm in!</button>
+    </form>
 
 </div>
