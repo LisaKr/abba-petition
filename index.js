@@ -216,10 +216,11 @@ app.get("/signers", needUserID, needSig, function(req, res) {
         .then(function(result) {
             //checking whether provided urls start with http or https and add the prefix if they don't
             result.rows.forEach(obj => {
+                console.log("TEST", obj.url);
                 if (obj.url) {
                     if (
                         obj.url.indexOf("http://") == -1 ||
-                        obj.url.indexOf("https://" == -1)
+                        obj.url.indexOf("https://") == -1
                     ) {
                         obj.url = "http://" + obj.url;
                     }
