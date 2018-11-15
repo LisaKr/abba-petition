@@ -1,13 +1,15 @@
 const express = require("express");
 const app = express();
 const hb = require("express-handlebars");
-app.engine("handlebars", hb({ defaultLayout: "main" }));
-app.set("view engine", "handlebars");
 const ca = require("chalk-animation");
 const csurf = require("csurf");
 const cookieSession = require("cookie-session");
 const db = require("./db.js");
+
 // const redis = require("./redis.js");
+
+app.engine("handlebars", hb({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 app.use(
     require("body-parser").urlencoded({
@@ -15,36 +17,40 @@ app.use(
     })
 );
 
-app.disable("x-powered-by");
-
+//session secret is a key used for signing and/or encrypting cookies set by the application to maintain session state
 app.use(
     cookieSession({
-        secret: `I'm always angry.`,
+        secret:
+            process.env.COOKIE_SECRET || require("./secrets.json").cookieSecret,
         maxAge: 1000 * 60 * 60 * 24 * 14
     })
 );
 
+//protecting from cross-site requests
 app.use(csurf());
 
 app.use(function(req, res, next) {
     res.locals.csrfToken = req.csrfToken();
     next();
 });
+//////
 
 app.use(express.static("./public"));
 
-//////RENDERS MAIN PAGE IF YOU'RE NOT LOGGED IN, RENDERS ADDITIONAL INFO IF YOU DELETED YOUR PROFILE//////
+app.disable("x-powered-by");
+
+////////////RENDERS MAIN PAGE IF YOU'RE NOT LOGGED IN, RENDERS ADDITIONAL MESSAGE IF YOU DELETED YOUR PROFILE/////
 app.get("/", needNoUserID, (req, res) => {
     res.render("home", {
         deleted: req.query.deleted_all
     });
 });
 
+///////////////////////////////REGISTRATION/////////////////////////
 app.get("/registration", needNoUserID, function(req, res) {
     res.render("registration");
 });
 
-//what do we do with the registration data?
 app.post("/registration", function(req, res) {
     if (req.body.pass) {
         db.hashPassword(req.body.pass)
@@ -56,14 +62,6 @@ app.post("/registration", function(req, res) {
                     hash
                 );
             })
-            //then we take the returned data from the database and
-            //set the cookies to know that this user is registered and his session is running.
-            //every user gets a unique id
-            //when users log in they will get the same cookies identifying them because it comes from a database, from their row
-            //results.rows is the array containing the actual rows of the database that satisfy our query.
-            //every row is an object. even if there is only one row returned we still have to access it by
-            //result.rows[0] because we need to access the json like object
-            //results on its own also contains tons of other data
             .then(function(result) {
                 req.session.userID = result.rows[0].id;
                 req.session.first = result.rows[0].first;
