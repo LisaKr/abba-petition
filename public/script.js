@@ -27,10 +27,4 @@ $(document).ready(function() {
         dropdown.removeClass("visible");
         dropdown.addClass("invisible"); //hide
     });
-
-    //adding a notification after the user deleted their profile, on document load
-    setTimeout(function() {
-        notification.removeClass("hidden");
-        notification.addClass("shown");
-    }, 500);
 });
