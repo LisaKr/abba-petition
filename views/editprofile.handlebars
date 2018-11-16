@@ -24,6 +24,13 @@
         <input type="text" name="url" autocomplete="off" value="{{results.url}}">
         <br /><br />
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <button type="submit" class="button">Save</button>
+        <button type="submit" class="button big">Update your profile</button>
     </form>
+
+    <form method="POST" action="/delete">
+        <button type="submit" class="button big">Delete your profile</button>
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    </form>
+
+
 </div>
