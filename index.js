@@ -216,6 +216,7 @@ app.get("/signers", needUserID, needSig, function(req, res) {
         .then(function(result) {
             //checking whether provided urls start with http or https and add the prefix if they don't
             result.rows.forEach(obj => {
+                //to see what the url was before
                 console.log("TEST", obj.url);
                 if (obj.url) {
                     if (
@@ -223,6 +224,8 @@ app.get("/signers", needUserID, needSig, function(req, res) {
                         obj.url.indexOf("https://") == -1
                     ) {
                         obj.url = "http://" + obj.url;
+                        //to see what the url was after my loop
+                        console.log("RESULT", obj.url);
                     }
                 }
             });
