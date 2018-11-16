@@ -368,7 +368,7 @@ app.post("/delete", (req, res) => {
 ///////////////////////RANDOM ABBA FACT//////////////////////
 app.get("/surprise", (req, res) => {
     //generating a random number for the random abba fact
-    let number = getRandomInt(7);
+    let number = getRandomInt(8);
     if (number == 1) {
         res.render("surprise", {
             video: true
@@ -396,6 +396,10 @@ app.get("/surprise", (req, res) => {
     } else if (number == 7) {
         res.render("surprise", {
             fact4: true
+        });
+    } else if (number == 8) {
+        res.render("surprise", {
+            fact5: true
         });
     }
 });
