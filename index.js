@@ -6,7 +6,6 @@ const csurf = require("csurf");
 const cookieSession = require("cookie-session");
 const db = require("./db.js");
 
-// const redis = require("./redis.js");
 
 app.engine("handlebars", hb({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
@@ -247,7 +246,7 @@ app.get("/signers/:city", function(req, res) {
             //checking whether provided urls start with http or https and add the prefix if they don't
             result.rows.forEach(obj => {
                 if (
-                    obj.url.indexOf("http://") == -1 ||
+                    obj.url.indexOf("http://") == -1 &&
                     obj.url.indexOf("https://" == -1)
                 ) {
                     obj.url = "http://" + obj.url;
@@ -420,7 +419,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 
-////////////////CUSTOM MIDDLEWARE TO FASCILITATE SYNTAX/////////////
+///////////////////CUSTOM MIDDLEWARE TO FASCILITATE SYNTAX////////////////
 function needNoUserID(req, res, next) {
     if (req.session.userID) {
         res.redirect("/petition");

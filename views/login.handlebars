@@ -1,25 +1,25 @@
 <div class="container">
-    <br />
+    <br/>
     <img src="/Abba.png" />
-    <br /><br /><br />
+    <br/><br/><br/>
 
     {{#if error}}
-        <div class="error">S.O.S! Something went wrong! Please try again. <br /> Note that email and password must match.</div>
+        <div class="error">S.O.S! Something went wrong! Please try again. <br/> Note that email and password must match.</div>
         <audio autoplay>
             <source src="womp-womp.mp3" type="audio/mpeg">
         </audio>
-        <br />
+        <br/>
     {{/if}}
 
     <form method="POST">
         E-Mail:<br>
         <input type="email" name="email" autocomplete="off">
-        <br /><br />
+        <br/><br/>
         Password:<br>
         <input type="password" name="pass" autocomplete="off">
-        <br /><br />
+        <br/><br/>
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button type="submit" class="button">Log In</button>
     </form>
-<br /><br />
+<br/><br/>
     Not registered yet? Please <a href="/registration"> sign up </a> here.

@@ -1,4 +1,4 @@
-/*GENERAL LOOK*/
+/*//////////////////GENERAL LOOK/////////////////*/
 html,
 body {
     height: 100%;
@@ -31,7 +31,7 @@ img {
     margin: 0 auto;
 }
 
-/*NOTIFICATION AND ERRORS*/
+/*//////////////////NOTIFICATION AND ERRORS////////////////*/
 .notification {
     position: absolute;
     width: 50%;
@@ -61,7 +61,7 @@ audio {
     display: none;
 }
 
-/*BUTTONS*/
+/*////////////BUTTONS////////////////*/
 
 .button {
     font-size: 1em;
@@ -128,7 +128,7 @@ a:hover {
     transform: scaleX(1);
 }
 
-/*INPUT FIELDS*/
+/*////////////////INPUT FIELDS////////////////*/
 
 input,
 #signature,
@@ -147,7 +147,7 @@ input {
     text-align: center;
 }
 
-/*LOOK OF ALL THE HANDLEBARS TEMPLATES*/
+/*//////////////LOOK OF ALL THE HANDLEBARS TEMPLATES////////////*/
 
 .container {
     width: 50%;
@@ -157,7 +157,7 @@ input {
     line-height: 1.2;
 }
 
-/*LOOK OF THE SURPRISE HANDLEBAR TEMPLATE*/
+/*////////////LOOK OF THE SURPRISE HANDLEBAR TEMPLATE/////////////*/
 .content {
     width: 65%;
     text-align: center;
