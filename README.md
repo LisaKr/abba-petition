@@ -30,7 +30,8 @@ Upon signing, users can edit their profile, delete their signature, view fellow 
   <img src="petition_showcase3.png";"/>
 </p>
 
-### Future Features
+Future Features
+--------
 - Responsive design
 - Display "your profile has been successfully updated" message
 - include a toggleable iframe Spotify player where user can listen to ABBA music to make signing the petition more appetizing
