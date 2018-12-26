@@ -12,9 +12,9 @@ Afterwards, the user is prompted to fill in additional information about themsel
   <img src="petition_showcase2.gif"/>
 </p>
 
-Upon signing, users can edit their profile, delete their signature, view fellow signers and filter signers by city.
+Upon signing, users can edit their profile, delete their signature, view fellow signers and filter signers by city. Moreover, a page providing the user with random ABBA facts and videos is included as well.
 <p align="center">
-  <img src="petition_showcase3.gif" style="width:100%;"/>
+  <img src="petition_showcase3.png";"/>
 </p>
 
 ### Future Features
