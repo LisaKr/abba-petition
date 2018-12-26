@@ -1,6 +1,7 @@
 # A petition aimed to reunite ABBA
 
-As a student project at SPICED Academy I built a petition site using Node.js, Express, PostgreSQL and Handlebars. 
+As a student project at SPICED Academy I built a petition site using Node.js, Express, PostgreSQL and Handlebars. It is hosted on [Heroku](https://reuniteabba.herokuapp.com/).
+
 
 First, the user can register or log in. 
 <p align="center">
