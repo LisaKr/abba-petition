@@ -17,6 +17,6 @@ Upon signing, users can edit their profile, delete their signature, view fellow 
   <img src="petition_showcase3.gif"/>
 </p>
 
-##Future Features
+### Future Features
 - Responsive design
 - Display "your profile has been successfully updated" message
