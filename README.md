@@ -14,7 +14,7 @@ Afterwards, the user is prompted to fill in additional information about themsel
 
 Upon signing, users can edit their profile, delete their signature, view fellow signers and filter signers by city.
 <p align="center">
-  <img src="petition_showcase3.gif"/>
+  <img src="petition_showcase3.gif" style="width:100%;"/>
 </p>
 
 ### Future Features
