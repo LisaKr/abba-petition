@@ -1,8 +1,5 @@
 A petition aimed to reunite ABBA
 ================== 
-Website
---------
-[https://reuniteabba.herokuapp.com/](https://reuniteabba.herokuapp.com/)
 
 Tech stack
 --------
